@@ -288,9 +288,10 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     backgroundColor: theme.colors.primary,
     padding: 15,
-    paddingHorizontal: 90,
+
     borderRadius: theme.radius.xl,
     borderCurve: "continuous",
+    paddingHorizontal: 30,
   },
   startText: {
     color: theme.colors.white,

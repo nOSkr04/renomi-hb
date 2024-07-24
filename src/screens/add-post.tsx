@@ -2,14 +2,16 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { hp, wp } from "../helper/common";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as ImagePicker from "expo-image-picker";
+import { hp, wp } from "../helper/common";
+import { theme } from "../constants/theme";
 const AddPostScreen = () => {
   const navigation = useNavigation();
   const { top } = useSafeAreaInsets();
   const paddingTop = top + 10;
   return (
-    <View>
+    <View style={styles.root}>
       <View style={[{ paddingTop, paddingBottom: 16 }, styles.header]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={hp(3)} color="black" />
@@ -35,5 +37,9 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: "600",
+  },
+  root: {
+    flex: 1,
+    backgroundColor: theme.colors.white,
   },
 });

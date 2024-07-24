@@ -43,7 +43,7 @@ const DetailScreen = ({ route }: Props) => {
           <AntDesign name="arrowleft" size={hp(3)} color="white" />
         </TouchableOpacity>
       </View>
-      <Video videoSource={data?.video} />
+      {/* <Video videoSource={data?.video} /> */}
       <Text style={styles.description}>
         Хайртаа дүүдээ төрсөн өдрийн мэнд хүргэе
       </Text>

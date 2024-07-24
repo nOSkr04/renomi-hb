@@ -21,11 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/android-logo.png",
         "backgroundColor": "#313C59"
-      }
+      },
+      "package": "com.noskr.nomihbs"
     },
     "plugins": [
       "expo-font",
       "expo-video"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "74adbb39-9bd5-4892-a65c-fe1e05187560"
+      }
+    }
   }
 }
