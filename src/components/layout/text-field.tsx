@@ -13,9 +13,13 @@ const TextField = memo(({ error, icon, ...rest }: Props) => {
     <View>
       <TextInput
         {...rest}
-        style={focused ? styles.focusInput : styles.input}
+        style={[
+          focused ? styles.focusInput : styles.input,
+          error ? { borderColor: "red" } : {},
+        ]}
         onBlur={() => setFocused(false)}
         onFocus={() => setFocused(true)}
+        placeholderTextColor={theme.colors.neutral(0.5)}
       />
     </View>
   );
@@ -31,11 +35,15 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 12,
     borderColor: theme.colors.neutral(0.2),
+    fontSize: 14,
+    lineHeight: 20,
   },
   focusInput: {
     borderWidth: 1,
     padding: 10,
     borderRadius: 12,
     borderColor: theme.colors.primary,
+    fontSize: 14,
+    lineHeight: 20,
   },
 });

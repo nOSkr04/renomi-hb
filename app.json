@@ -26,7 +26,10 @@
     },
     "plugins": [
       "expo-font",
-      "expo-video"
+      "expo-video",
+      ["expo-image-picker", {
+        "photosPermission": "Та бичлэгээ оруулахын тулд утасны зургийн зөвшөөрөл өгөх ёстой"
+      }]
     ],
     "extra": {
       "eas": {

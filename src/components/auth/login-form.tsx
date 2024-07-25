@@ -2,6 +2,7 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import React, { memo } from "react";
 import { Control, Controller } from "react-hook-form";
 import { TextField } from "../layout/text-field";
+import ErrorText from "../layout/error-text";
 
 export type ILoginForm = {
   username: string;
@@ -16,26 +17,35 @@ const LoginForm = memo(({ control }: { control: Control<ILoginForm, any> }) => {
         name="username"
         render={({ field: { onChange, value }, formState: { errors } }) => {
           return (
-            <TextField
-              onChangeText={(value) => onChange(value.trim())}
-              value={value}
-              placeholder="Нэвтрэх нэр"
-            />
+            <>
+              <TextField
+                onChangeText={(value) => onChange(value.trim())}
+                value={value}
+                placeholder="Нэвтрэх нэр"
+                error={errors.username?.message}
+              />
+              <ErrorText error={errors.username?.message} />
+            </>
           );
         }}
         rules={{ required: "Заавал оруулна уу" }}
       />
+
       <View style={styles.h12} />
       <Controller
         control={control}
         name="password"
         render={({ field: { onChange, value }, formState: { errors } }) => (
-          <TextField
-            onChangeText={(value) => onChange(value.trim())}
-            value={value}
-            placeholder="Нууц үг"
-            secureTextEntry={true}
-          />
+          <>
+            <TextField
+              onChangeText={(value) => onChange(value.trim())}
+              value={value}
+              placeholder="Нууц үг"
+              secureTextEntry={true}
+              error={errors.password?.message}
+            />
+            <ErrorText error={errors.password?.message} />
+          </>
         )}
         rules={{
           required: "Заавал оруулна уу",
@@ -57,8 +67,5 @@ const styles = StyleSheet.create({
   },
   h12: {
     height: 12,
-  },
-  input: {
-    borderWidth: 1,
   },
 });

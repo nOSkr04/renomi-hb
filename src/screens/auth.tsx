@@ -27,6 +27,7 @@ import { authLogin } from "../store/auth-slice";
 import { UserApi } from "../apis";
 import { hp, wp } from "../helper/common";
 import { theme } from "../constants/theme";
+import Loader from "../components/layout/loader";
 
 const { width, height } = Dimensions.get("window");
 
@@ -113,10 +114,12 @@ const AuthScreen = () => {
       try {
         const res = await UserApi.login(createData);
         dispatch(authLogin(res));
+        setLoading(false);
       } catch (err: any) {
         setLoginError("username", {
           message: err.error.message,
         });
+        setLoading(false);
       } finally {
         setLoading(false);
       }
@@ -200,9 +203,16 @@ const AuthScreen = () => {
           </Animated.View>
           <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
             <LoginForm control={loginControl} />
-            <Pressable onPress={handleLogin(onLogin)} style={styles.formButton}>
-              <Text style={styles.formTitle}>Нэвтрэх</Text>
-            </Pressable>
+            <TouchableOpacity
+              onPress={handleLogin(onLogin)}
+              style={styles.formButton}
+            >
+              {loading ? (
+                <Loader />
+              ) : (
+                <Text style={styles.formTitle}>Нэвтрэх</Text>
+              )}
+            </TouchableOpacity>
           </Animated.View>
         </Animated.View>
       </Animated.View>
