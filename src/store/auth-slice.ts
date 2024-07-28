@@ -3,28 +3,27 @@ import { IAuth } from "../interfaces/auth";
 import { IUser } from "../interfaces/user";
 
 const initialState: IAuth = {
-  user : null,
-  token: null,
+  user: null,
+  accessToken: null,
 };
 
 const authSlice = createSlice({
-  name    : "auth",
+  name: "auth",
   initialState,
   reducers: {
     authLogin: (state, { payload }: { payload: IAuth }) => {
-      state.token = payload.token;
+      state.accessToken = payload.accessToken;
       return state;
     },
     authLogout: (state) => {
       state.user = null;
-      state.token = null;
+      state.accessToken = null;
       return state;
-      
     },
-    authMe: (state, { payload }: { payload: IUser}) => {
+    authMe: (state, { payload }: { payload: IUser }) => {
       state.user = payload;
       return state;
-    }
+    },
   },
 });
 

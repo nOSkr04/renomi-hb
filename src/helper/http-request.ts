@@ -43,10 +43,10 @@ class HttpRequest {
       },
     };
 
-    if (state.auth && state.auth.token && typeof state.auth.token === "string") {
+    if (state.auth && state.auth.accessToken && typeof state.auth.accessToken === "string") {
       defaultOptions.headers = {
         ...defaultOptions.headers,
-        Authorization: `Bearer ${state.auth.token}`,
+        Authorization: `Bearer ${state.auth.accessToken}`,
       };
     }
 

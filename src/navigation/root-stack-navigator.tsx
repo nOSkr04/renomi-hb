@@ -21,9 +21,9 @@ const RootStackNavigator = () => {
   };
 
   const dispatch = useDispatch();
-  const { token } = useSelector((state: { auth: IAuth }) => state.auth);
-  const { data: user } = useSWR<IUser>(
-    ["swr.user.me", token],
+  const { accessToken } = useSelector((state: { auth: IAuth }) => state.auth);
+  const { data: user, error } = useSWR<IUser>(
+    ["swr.user.me", accessToken],
     async () => {
       return await UserApi.authMe();
     },
@@ -38,6 +38,10 @@ const RootStackNavigator = () => {
       },
     }
   );
+
+  console.log(user, accessToken, "WEAP");
+
+  console.log(error);
 
   return (
     <Navigator

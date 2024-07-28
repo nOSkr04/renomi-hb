@@ -1,4 +1,6 @@
 import * as UserApi from "./user";
-import * as AdviceApi from "./advice";
+import * as ContentApi from "./content";
+import * as CategoryApi from "./category";
+import * as MediaApi from "./media";
 
-export { UserApi, AdviceApi };
+export { UserApi, ContentApi, CategoryApi, MediaApi };

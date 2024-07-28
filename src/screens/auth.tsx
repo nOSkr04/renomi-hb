@@ -113,6 +113,7 @@ const AuthScreen = () => {
 
       try {
         const res = await UserApi.login(createData);
+        console.log(res);
         dispatch(authLogin(res));
         setLoading(false);
       } catch (err: any) {

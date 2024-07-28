@@ -4,16 +4,16 @@ import { HttpRequest } from "../utils";
 const httpRequest = new HttpRequest();
 
 export const me = async () => {
-  const res = await httpRequest.get("/users/me");
-  return User.fromJson(res.data);
+  const res = await httpRequest.get("/me");
+  return User.fromJson(res);
 };
 export const authMe = async () => {
-  const res = await httpRequest.get("/users/me");
-  return res.data;
+  const res = await httpRequest.get("/me");
+  return res;
 };
 export const deleteMe = async () => {
   const res = await httpRequest.post("/users/deleteAccount");
-  return res.data;
+  return res;
 };
 
 export const login = async (data: {
@@ -21,11 +21,11 @@ export const login = async (data: {
   password: string;
   expoPushToken?: string;
 }) => {
-  const res = await httpRequest.post("/users/login", data);
+  const res = await httpRequest.post("/auth/login", data);
   return res;
 };
 
 export const logout = async () => {
-  const res = await httpRequest.get("/users/logout");
+  const res = await httpRequest.get("/auth/logout");
   return res;
 };

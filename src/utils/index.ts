@@ -3,7 +3,8 @@ import { HttpRequest as BaseHttpRequest, HttpHandler } from "../helper";
 import { authLogout } from "../store/auth-slice";
 
 export class HttpRequest extends BaseHttpRequest {
-  uri = "https://s69server.com";
+  // uri = "https://s69server.com";
+  uri = "http://192.168.1.8:3000";
   store = store;
   errorHandler = (statusCode: number, error: HttpHandler): void => {
     if (statusCode === 401) {

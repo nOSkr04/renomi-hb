@@ -9,17 +9,19 @@ import {
 import React, { useCallback, useRef, useState } from "react";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
-import { useSWRConfig } from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import useSWRInfinite from "swr/infinite";
 import { MasonryFlashList, MasonryFlashListRef } from "@shopify/flash-list";
 import { getColumnCount, hp, wp } from "../helper/common";
-import { AdviceApi, UserApi } from "../apis";
+import { CategoryApi, ContentApi, UserApi } from "../apis";
 import { authLogout } from "../store/auth-slice";
 import { theme } from "../constants/theme";
 import ImageCard from "../components/home/image-card";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutes } from "../navigation/types";
+import { IContent } from "../interfaces/content";
+import Categories from "../components/category/categories";
 const HomeScreen = () => {
   const scrollRef = useRef<MasonryFlashListRef<any>>(null);
   const dispatch = useDispatch();
@@ -28,7 +30,8 @@ const HomeScreen = () => {
   const { mutate } = useSWRConfig();
   const paddingTop = top + 10;
   const columns = getColumnCount();
-  const { data, size, setSize, isLoading } = useSWRInfinite(
+  const [activeCategory, setActiveCategory] = useState<null | string>(null);
+  const { data, size, setSize, isLoading, error } = useSWRInfinite(
     (index, previousPageData) => {
       if (
         previousPageData &&
@@ -42,13 +45,18 @@ const HomeScreen = () => {
     },
     async (key) => {
       const page = key.split(".").pop();
-      const res = await AdviceApi.advices({
+      const res = await ContentApi.contentList({
         page: parseInt(`${page || 0}`, 10),
         limit: 10,
       });
       return res;
     }
   );
+
+  const { data: category } = useSWR("swr.category", async () => {
+    const res = await CategoryApi.categoryList();
+    return res;
+  });
 
   const handleScrollUp = () => {
     scrollRef.current?.scrollToOffset({ offset: 0, animated: true });
@@ -65,7 +73,7 @@ const HomeScreen = () => {
   }, [dispatch, mutate]);
 
   const renderItem = useCallback(
-    ({ item, index }: { item: any; index: number }) => {
+    ({ item, index }: { item: IContent; index: number }) => {
       return <ImageCard item={item} index={index} />;
     },
     []
@@ -74,6 +82,17 @@ const HomeScreen = () => {
   const onAdd = useCallback(() => {
     navigation.navigate(NavigationRoutes.AddPostScreen);
   }, []);
+
+  const renderHeader = useCallback(() => {
+    return (
+      <Categories
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
+        data={category}
+      />
+    );
+  }, []);
+
   LogBox.ignoreLogs([
     "You have passed a style to FlashList. This list doesn't support styling, use contentContainerStyle or wrap the list in a parent and apply style to it instead.",
   ]);
@@ -93,10 +112,11 @@ const HomeScreen = () => {
         </View>
       </View>
       <MasonryFlashList
-        data={(data || []).map((entry) => entry?.data).flat()}
+        data={data?.map((entry) => entry?.rows)?.flat()}
         renderItem={renderItem}
         estimatedItemSize={200}
         scrollEventThrottle={5}
+        ListHeaderComponent={renderHeader}
         ref={scrollRef}
         numColumns={columns}
         contentContainerStyle={styles.listContainerStyle}

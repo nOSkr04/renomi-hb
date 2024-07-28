@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Control, Controller } from "react-hook-form";
 import { TextField } from "../layout/text-field";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
@@ -8,10 +8,13 @@ import { hp, wp } from "../../helper/common";
 import ErrorText from "../layout/error-text";
 import * as ImagePicker from "expo-image-picker";
 import { AddContentVideo } from "./add-content-video";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import SelectCategorySheet from "../category/select-category-sheet";
+import { ICategory } from "../../interfaces/category";
 export type IContentForm = {
   name: string;
-  video: any;
-  type: string;
+  video: string;
+  category: ICategory;
   description: string;
 };
 
@@ -20,6 +23,18 @@ type Props = {
 };
 
 const ContentForm = ({ control }: Props) => {
+  const modalRef = useRef<BottomSheetModal>(null);
+  const [snapIndex, setSnapIndex] = useState(-1);
+  const openCategoryModal = () => {
+    modalRef.current?.present();
+    setSnapIndex(0);
+  };
+
+  const closeCategoryModal = () => {
+    modalRef.current?.close();
+    setSnapIndex(-1);
+  };
+
   return (
     <View style={styles.container}>
       <Controller
@@ -58,7 +73,7 @@ const ContentForm = ({ control }: Props) => {
             </>
           );
         }}
-        rules={{ required: "Заавал оруулна уу" }}
+        // rules={{ required: "Заавал оруулна уу" }}
       />
       <View style={styles.h8} />
       <Controller
@@ -67,41 +82,49 @@ const ContentForm = ({ control }: Props) => {
         render={({ field: { onChange, value }, formState: { errors } }) => (
           <>
             <TextField
-              onChangeText={(value) => onChange(value.trim())}
+              onChangeText={onChange}
               value={value}
               placeholder="Хэнээс"
-              secureTextEntry={true}
               error={errors.name?.message}
             />
             <ErrorText error={errors.name?.message} />
           </>
         )}
-        rules={{
-          required: "Заавал оруулна уу",
-        }}
+        // rules={{
+        //   required: "Заавал оруулна уу",
+        // }}
       />
       <View style={styles.h8} />
       <Controller
         control={control}
-        name="type"
+        name="category"
         render={({ field: { onChange, value }, formState: { errors } }) => (
           <>
             <TouchableOpacity
               style={[styles.typeContianer, errors.video && styles.errorBorder]}
+              onPress={openCategoryModal}
             >
-              <Text style={styles.typeTitle}>Төрөл</Text>
+              <Text style={[styles.typeTitle, value && styles.colorBlack]}>
+                {value?.name || "Төрөл"}
+              </Text>
               <Entypo
                 name="chevron-down"
                 size={20}
-                color={theme.colors.neutral(0.5)}
+                color={value ? theme.colors.black : theme.colors.neutral(0.5)}
               />
             </TouchableOpacity>
-            <ErrorText error={errors.type?.message} />
+            <ErrorText error={errors.category?.message} />
+            <SelectCategorySheet
+              modalRef={modalRef}
+              closeCategoryModal={closeCategoryModal}
+              snapIndex={snapIndex}
+              onChange={onChange}
+            />
           </>
         )}
-        rules={{
-          required: "Заавал сонгоно уу",
-        }}
+        // rules={{
+        //   required: "Заавал сонгоно уу",
+        // }}
       />
       <View style={styles.h8} />
       <Controller
@@ -109,16 +132,16 @@ const ContentForm = ({ control }: Props) => {
         name="description"
         render={({ field: { onChange, value }, formState: { errors } }) => (
           <TextField
-            onChangeText={(value) => onChange(value.trim())}
+            onChangeText={onChange}
             value={value}
             placeholder="Мэнд хүргэх"
             multiline
           />
         )}
-        rules={{
-          required: "Заавал оруулна уу",
-          minLength: { value: 4, message: "Та 4-с дээш тэмдэгт оруулна уу" },
-        }}
+        // rules={{
+        //   required: "Заавал оруулна уу",
+        //   // minLength: { value: 4, message: "Та 4-с дээш тэмдэгт оруулна уу" },
+        // }}
       />
     </View>
   );
@@ -163,5 +186,8 @@ const styles = StyleSheet.create({
   errorBorder: {
     borderColor: "red",
     borderWidth: 1,
+  },
+  colorBlack: {
+    color: theme.colors.black,
   },
 });

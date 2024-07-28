@@ -2,7 +2,13 @@ import { HttpRequest } from "../utils";
 
 const httpRequest = new HttpRequest();
 
-export const authMe = async () => {
-  const res = await httpRequest.get("/users/me");
-  return res.data;
+export const contentList = async ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}) => {
+  const res = await httpRequest.get("/content", { page, limit });
+  return res;
 };

@@ -3,19 +3,25 @@ import React from "react";
 import { Image } from "expo-image";
 import Animated from "react-native-reanimated";
 import { theme } from "../../constants/theme";
-import { wp } from "../../helper/common";
+import { getImageSize, wp } from "../../helper/common";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutes } from "../../navigation/types";
+import { IContent } from "../../interfaces/content";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 
 type Props = {
-  item: any;
+  item: IContent;
   index: number;
 };
 
 const ImageCard = ({ item, index }: Props) => {
   const navigation = useNavigation();
+
+  const imageHeight = () => {
+    return { height: getImageSize(item?.image?.height, item?.image?.width) };
+  };
+
   const style = () => {
     return {
       marginLeft: index % 2 !== 0 ? 5 : 0,
@@ -30,10 +36,9 @@ const ImageCard = ({ item, index }: Props) => {
       }
     >
       <AnimatedImage
-        style={[styles.image]}
+        style={[styles.image, imageHeight()]}
         source={item?.image?.url}
         transition={100}
-        sharedTransitionTag="WP"
       />
     </Pressable>
   );
